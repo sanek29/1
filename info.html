@@ -1,0 +1,189 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    body {
+      background: #ccc;
+      font-family: Verdana, sans-serif;
+      font-size: 16px;
+      line-height: 156%;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    dl {
+      width: 100%;
+      overflow: hidden;
+      background: #f1f1f5;
+      padding: 0;
+      margin: 0
+    }
+    dt {
+      float: left;
+      width: 50%;
+      background: #d1d1eb;
+      padding: 0;
+      margin: 0
+    }
+    dd {
+      float: left;
+      width: 50%;
+      background: #c2c2ed;
+      padding: 0;
+      margin: 0
+    }
+    .tabs-container {
+      max-width: 720px;
+      background: #fff;
+      margin: 20px auto;
+    }
+    .tabs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #ccc;
+    }
+    .tab {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+    .tab.tab--active {
+      border-bottom: 3px solid rgba(64, 27, 85, 1);
+    }
+    .tabs-content {
+
+    }
+    .tab-content {
+      display: none;
+      padding: 30px;
+    }
+    .tab-content.tab-content--active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="tabs-container">
+    <ul class="tabs">
+      <li data-item="1" class="tab tab--active">General</li>
+      <li data-item="2" class="tab">Engine</li>
+      <li data-item="3" class="tab">Specials</li>
+    </ul>
+    <ul class="tabs-content">
+      <li data-item="1" class="tab-content tab-content--active">
+        <dl>
+          <dt>Model</dt>
+          <dd>DC11</dd>
+          <dt>Delivery time</dt>
+          <dd>2-3 weeks</dd>
+        </dl>
+      </li>
+      <li data-item="2" class="tab-content">
+        <dl>
+          <dt>bhp</dt>
+          <dd>404</dd>
+        </dl>
+      </li>
+      <li data-item="3" class="tab-content">
+        <span>convertible, leather seats</span>
+      </li>
+    </ul>
+  </div>
+  <div>
+    <tr>
+      
+        <td style="padding-right:10px;">Menge:</td>
+          <input type=text id="field1" onKeyUp=recalc() value=0>
+          <td style="padding-left:40px;">Gesamtsumme:</td>
+          <td width=30%><span id="fieldRes">0</span></td>
+          <td style="padding-right:10px;">€</td>
+    </tr>
+  </div>
+<script language="JavaScript">
+   function price_format(o) {
+    return Number(o).toFixed(2);
+   }
+   function recalc() {
+   var price = 19.95;
+   var sum = price_format(parseFloat(document.getElementById('field1').value) * price);
+   var kol = price_format(parseFloat(document.getElementById('field1').value));
+   switch (true) {
+    case kol > 0 && kol <= 2:  document.getElementById('fieldRes').innerHTML = sum - (sum * 10 / 100);
+   break;
+    case kol > 2 && kol <= 4:  document.getElementById('fieldRes').innerHTML = sum - (sum * 20 / 100);
+   break;
+    case kol > 4 :  document.getElementById('fieldRes').innerHTML = sum - (sum * 30 / 100);
+   break;
+   }
+}
+   
+    </script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+      $(function(){
+        var urlTab = getUrlParameter('tab');
+        var tabItem;
+        var init = false
+
+        if(urlTab !== undefined && init === false) {
+          changeTab(urlTab);
+          init = true;
+        } else {
+          $('.tab[data-item=1]').addClass('tab--active');
+          $('.tab-content[data-item=1]').addClass('tab-content--active');
+        }
+
+        $('.tab').click(function(){
+          if(!$(this).hasClass('tab--active')){
+            tabItem = $(this).data('item');
+            changeTab(tabItem);
+            insertParam('tab', tabItem);
+          }
+        });
+      });
+
+      function changeTab(item){
+        $('.tab--active').removeClass('tab--active');
+        $('.tab[data-item=' + item + ']').addClass('tab--active');
+        $('.tab-content--active').removeClass('tab-content--active');
+        $('.tab-content[data-item=' + item + ']').addClass('tab-content--active');
+      }
+
+      function getUrlParameter(sParam){
+    		var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+    			sURLVariables = sPageURL.split('&'),
+    			sParameterName,
+    			i;
+    		for (i = 0; i < sURLVariables.length; i++) {
+    			sParameterName = sURLVariables[i].split('=');
+    			if (sParameterName[0] === sParam) {
+    				return sParameterName[1] === undefined ? false : sParameterName[1];
+    			}
+    		}
+    	};
+
+      function insertParam(key, value){
+        key = encodeURI(key); value = encodeURI(value);
+        var kvp = document.location.search.substr(1).split('&');
+        var i=kvp.length; var x; while(i--){
+          x = kvp[i].split('=');
+          if (x[0]==key)
+          {
+            x[1] = value;
+            kvp[i] = x.join('=');
+            break;
+          }
+        }
+        if(i<0) {kvp[kvp.length] = [key,value].join('=');}
+        document.location.search = kvp.join('&');
+      }
+  </script>
+</body>
+</html>
